@@ -17,6 +17,7 @@ struct Phobia {
 impl Phobia {
     fn get_hint(&self) -> &str { &self.hint }
     fn get_word(&self) -> &str { &self.secret_word }
+    fn get_name(&self) -> &str { &self.name }
     
     fn reveal_letter(&mut self, _i: &u8) {
         if self.secret_word.is_empty() { return; }
@@ -31,11 +32,11 @@ fn build_phobia (name: String, hint: String) -> Phobia {
 
 fn build_gallow () -> Vec<String> {
     let mut gallow: Vec<String> = Vec::new();
-    gallow.push(" |==== ".to_string());
-    gallow.push(" |     ".to_string());
-    gallow.push(" |     ".to_string());
-    gallow.push(" |     ".to_string());
-    gallow.push("===".to_string());
+    gallow.push(" ╔═══╤ ".to_string());
+    gallow.push(" ║     ".to_string());
+    gallow.push(" ║     ".to_string());
+    gallow.push(" ║     ".to_string());
+    gallow.push("═╩═".to_string());
 
     gallow
 }
@@ -59,8 +60,6 @@ fn show_word(word: &str) {
     for x in word.chars() {
         print!{"{} ", x};
     }
-
-    println!{""};
 }
 
 //fn update_gallow(g: &Vec<String>, x: &u8) -> Vec<String> {
@@ -77,19 +76,19 @@ fn main() {
     // Variables
     let phobia = build_phobia(String::from("tachophobia"), String::from("speed"));    
     
-    let max_guesses: u8 = 6;
+    const MAX_GUESSES: u8 = 6;
     let mut hint: bool = false;
     
     let mut guesses: u8 = 0;    
     let mut gallow = build_gallow();
 
-    while guesses < max_guesses {
+    while guesses < MAX_GUESSES {
         //clear_console();
 
         println!{"=== H A N G M A N ==="};
         println!{"Number of guesses: {}\n", guesses};
         
-        //update_gallow(&gallow, &guesses);
+        //if guesses > 0 { update_gallow(&gallow, &guesses); };
         show_gallow(&gallow);
         
         if hint {
@@ -97,7 +96,9 @@ fn main() {
         }
 
         show_word(phobia.get_word());
-
+        
+        println!{"\nEnter a letter [a-z] to guess, 1 to reveal hint, or 0 to quit.\n"};    
+        
         let mut guess = String::new();
         io::stdin().read_line(&mut guess)
             .expect("Failed to read line");
@@ -122,10 +123,15 @@ fn main() {
                 None => continue,
             };
         } else {
-            
-        }
+            // TODO: check guess against word
+            // TODO: if guess in word update secret_word
+            // TODO: add guess to guessed_letters
 
-        guesses = guesses + 1;
-        println!{"You guessed: {}", guess};
+            guesses = guesses + 1;
+            println!{"You guessed: {}", guess};
+        }        
     }
+
+    println!{"Sorry... you suck!"};
+    println!{"The word was: {}, a fear of {}!", phobia.get_name(), phobia.get_hint()}
 }
