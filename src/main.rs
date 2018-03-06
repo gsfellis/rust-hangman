@@ -133,12 +133,13 @@ fn main() {
         } else {
             // TODO: check guess against word
             if check_word(phobia.get_name(), guess) {
+                // TODO: if guess in word update secret_word
                 phobia.reveal_letter(guess);
                 println!{"Found it!"};
             } else {
                 println!{"No good!"};
             }
-            // TODO: if guess in word update secret_word
+            
             // TODO: add guess to guessed_letters
 
             guesses = guesses + 1;
