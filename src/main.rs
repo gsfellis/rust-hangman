@@ -19,7 +19,7 @@ impl Phobia {
     fn get_word(&self) -> &str { &self.secret_word }
     fn get_name(&self) -> &str { &self.name }
     
-    fn reveal_letter(&mut self, _i: &u8) {
+    fn reveal_letter(&mut self, _c: char) {
         if self.secret_word.is_empty() { return; }
         
     }
@@ -72,9 +72,17 @@ fn show_gallow(g: &Vec<String>) {
     }
 }
 
+fn check_word(word: &str, guess: char) -> bool {    
+    word.contains(guess)
+}
+
+fn update_word(word: &str, guess: &char) {
+
+}
+
 fn main() {
     // Variables
-    let phobia = build_phobia(String::from("tachophobia"), String::from("speed"));    
+    let mut phobia = build_phobia(String::from("tachophobia"), String::from("speed"));    
     
     const MAX_GUESSES: u8 = 6;
     let mut hint: bool = false;
@@ -124,6 +132,12 @@ fn main() {
             };
         } else {
             // TODO: check guess against word
+            if check_word(phobia.get_name(), guess) {
+                phobia.reveal_letter(guess);
+                println!{"Found it!"};
+            } else {
+                println!{"No good!"};
+            }
             // TODO: if guess in word update secret_word
             // TODO: add guess to guessed_letters
 
